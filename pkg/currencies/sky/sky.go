@@ -36,7 +36,7 @@ func New(conf *otc.Config) (*Connection, error) {
 	}
 
 	// TODO: config to put coins in one address?
-	_, _ = w.GenerateAddresses(100)
+	_ = w.GenerateAddresses(100)
 	conn := &Connection{Wallet: w, Client: c}
 	conn.FromAddrs = conn.getFromAddrs()
 
@@ -75,7 +75,7 @@ func (c *Connection) getFromAddrs() []string {
 	addrs := c.Wallet.GetAddresses()
 
 	if len(addrs) == 0 {
-		addrs, _ = c.Wallet.GenerateAddresses(1)
+		addrs = c.Wallet.GenerateAddresses(1)
 	}
 
 	out := make([]string, len(addrs))
@@ -105,9 +105,9 @@ func (c *Connection) Send(addr string, amount uint64) (string, error) {
 }
 
 func (c *Connection) Address() (string, error) {
-	addr, err := c.Wallet.GenerateAddresses(1)
-	if err != nil {
-		return "", err
+	addr := c.Wallet.GenerateAddresses(1)
+	if addr == nil {
+		return "", fmt.Errorf("error generating address")
 	}
 
 	return addr[0].String(), nil

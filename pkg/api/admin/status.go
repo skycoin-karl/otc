@@ -29,11 +29,7 @@ func Status(curs *currencies.Currencies, modl *model.Model) http.HandlerFunc {
 
 		// TODO: add other currency support
 		if res.Source, err = curs.Source(otc.BTC); err != nil {
-			if err == currencies.ErrPriceMissing {
-				http.Error(w, "not supported", http.StatusBadRequest)
-			} else {
-				http.Error(w, "server error", http.StatusInternalServerError)
-			}
+			http.Error(w, "server error", http.StatusInternalServerError)
 			return
 		}
 
@@ -47,8 +43,6 @@ func Status(curs *currencies.Currencies, modl *model.Model) http.HandlerFunc {
 		res.Prices.Exchange = e
 		res.Prices.ExchangeUpdated = eu.UTC().Unix()
 
-		if err = json.NewEncoder(w).Encode(&res); err != nil {
-			http.Error(w, "server error", http.StatusInternalServerError)
-		}
+		json.NewEncoder(w).Encode(&res)
 	}
 }

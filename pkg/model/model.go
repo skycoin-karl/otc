@@ -17,20 +17,20 @@ var ErrReqMissing error = errors.New("request missing")
 type Model struct {
 	sync.RWMutex
 
+	Running bool
 	Workers *Workers
 	Logger  *log.Logger
 	Router  *actor.Actor
 	Lookup  map[string]*otc.Request
 	Stops   map[*actor.Actor]chan struct{}
 	stop    chan struct{}
-
-	paused bool
 }
 
 func New(curs *currencies.Currencies) (*Model, error) {
 	workers := NewWorkers(curs)
 
 	model := &Model{
+		Running: true,
 		Workers: workers,
 		Logger:  log.New(os.Stdout, "    [OTC] ", log.LstdFlags),
 		Router: actor.New(
@@ -165,17 +165,17 @@ func (m *Model) Add(req *otc.Request) error {
 func (m *Model) Paused() bool {
 	m.RLock()
 	defer m.RUnlock()
-	return m.paused
+	return m.Running
 }
 
 func (m *Model) Pause() {
 	m.Lock()
 	defer m.Unlock()
-	m.paused = true
+	m.Running = false
 }
 
 func (m *Model) Unpause() {
 	m.Lock()
 	defer m.Unlock()
-	m.paused = false
+	m.Running = true
 }

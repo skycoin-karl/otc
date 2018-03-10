@@ -24,6 +24,8 @@ type Model struct {
 	Logger  *log.Logger
 	Router  *actor.Actor
 	Lookup  map[string]*otc.Request
+
+	paused bool
 }
 
 func New(curs *currencies.Currencies) *Model {
@@ -138,4 +140,22 @@ func (m *Model) Add(req *otc.Request) error {
 	m.Router.Add(work)
 
 	return nil
+}
+
+func (m *Model) Paused() bool {
+	m.RLock()
+	defer m.RUnlock()
+	return m.paused
+}
+
+func (m *Model) Pause() {
+	m.Lock()
+	defer m.Unlock()
+	m.paused = true
+}
+
+func (m *Model) Unpause() {
+	m.Lock()
+	defer m.Unlock()
+	m.paused = false
 }

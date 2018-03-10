@@ -4,7 +4,6 @@ import (
 	"log"
 	"sync"
 	"sync/atomic"
-	"time"
 
 	"github.com/skycoin-karl/otc/pkg/otc"
 )
@@ -15,23 +14,15 @@ type Actor struct {
 	Reqs int64
 	Work *sync.Map
 	Task Task
-	Errs *log.Logger
+	Logs *log.Logger
 }
 
-func New(errs *log.Logger, task Task) *Actor {
-	return &Actor{0, &sync.Map{}, task, errs}
+func New(logs *log.Logger, task Task) *Actor {
+	return &Actor{0, &sync.Map{}, task, logs}
 }
 
 func (a *Actor) Count() int64 { return atomic.LoadInt64(&a.Reqs) }
-
-func (a *Actor) Run(dur time.Duration) {
-	for {
-		<-time.After(dur)
-		a.Tick()
-	}
-}
-
-func (a *Actor) Tick() { a.Work.Range(a.Ranger(a.Task)) }
+func (a *Actor) Tick()        { a.Work.Range(a.Ranger(a.Task)) }
 
 func (a *Actor) Add(work *otc.Work) {
 	if _, existed := a.Work.LoadOrStore(work, nil); !existed {
@@ -54,7 +45,7 @@ func (a *Actor) Ranger(task Task) func(k, v interface{}) bool {
 
 		// log if error
 		if err != nil {
-			a.Errs.Println(err)
+			a.Logs.Println(err)
 		}
 
 		if done {

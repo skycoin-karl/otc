@@ -2,6 +2,8 @@ package main
 
 import (
 	"net/http"
+	"os"
+	"os/signal"
 
 	"github.com/skycoin-karl/otc/pkg/api/public"
 	"github.com/skycoin-karl/otc/pkg/currencies"
@@ -33,10 +35,20 @@ func init() {
 }
 
 func main() {
-	modl := model.New(CURRENCIES)
+	// for graceful shutdown / cleanup
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, os.Interrupt)
+
+	modl, err := model.New(CURRENCIES)
+	if err != nil {
+		panic(err)
+	}
 
 	public := public.New(CURRENCIES, modl)
-
 	println("listening")
-	http.ListenAndServe(":8080", public)
+	go http.ListenAndServe(":8080", public)
+
+	<-stop
+	println("stopping")
+	modl.Stop()
 }

@@ -2,9 +2,13 @@ package model
 
 import (
 	"encoding/json"
+	"fmt"
+	"io/ioutil"
 	"os"
+	"strings"
 
 	"github.com/skycoin-karl/otc/pkg/otc"
+	"github.com/skycoin/skycoin/src/cipher"
 )
 
 const (
@@ -79,6 +83,60 @@ func Log(req *otc.Request, res *otc.Result) error {
 	return file.Close()
 }
 
-func Load(path string) ([]*otc.Request, error) {
-	return nil, nil
+func Load() ([]*otc.Request, error) {
+	// get list of files in db dir
+	files, err := ioutil.ReadDir(PATH + REQS)
+	if err != nil {
+		return nil, err
+	}
+
+	reqs := make([]*otc.Request, 0)
+
+	// for each .json file in db dir
+	for _, file := range files {
+		// ignore hidden files
+		if file.Name()[0] == '.' {
+			continue
+		}
+
+		// get struct from json
+		req, err := Read(PATH+REQS, file.Name())
+		if err != nil {
+			return nil, err
+		}
+
+		// append to slice
+		reqs = append(reqs, req)
+	}
+
+	return reqs, nil
+}
+
+func Read(path, filename string) (*otc.Request, error) {
+	parts := strings.Split(filename, ":")
+
+	// check that filename is in form of x:x:x
+	if len(parts) < 3 {
+		return nil, fmt.Errorf("invalid request filename")
+	}
+
+	// check that first part is valid sky address
+	_, err := cipher.DecodeBase58Address(parts[0])
+	if err != nil {
+		return nil, err
+	}
+
+	// open file for reading
+	file, err := os.OpenFile(path+filename, os.O_RDONLY, 0644)
+	if err != nil {
+		return nil, err
+	}
+
+	var req *otc.Request
+
+	if err = json.NewDecoder(file).Decode(&req); err != nil {
+		return nil, err
+	}
+
+	return req, file.Close()
 }

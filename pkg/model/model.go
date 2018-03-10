@@ -9,10 +9,7 @@ import (
 
 	"github.com/skycoin-karl/otc/pkg/actor"
 	"github.com/skycoin-karl/otc/pkg/currencies"
-	"github.com/skycoin-karl/otc/pkg/monitor"
 	"github.com/skycoin-karl/otc/pkg/otc"
-	"github.com/skycoin-karl/otc/pkg/scanner"
-	"github.com/skycoin-karl/otc/pkg/sender"
 )
 
 var ErrReqMissing error = errors.New("request missing")
@@ -24,25 +21,14 @@ type Model struct {
 	Logger  *log.Logger
 	Router  *actor.Actor
 	Lookup  map[string]*otc.Request
+	Stops   map[*actor.Actor]chan struct{}
+	stop    chan struct{}
 
 	paused bool
 }
 
-func New(curs *currencies.Currencies) *Model {
-	workers := &Workers{
-		Scanner: actor.New(
-			log.New(os.Stdout, "[SCANNER] ", log.LstdFlags),
-			scanner.Task(curs),
-		),
-		Sender: actor.New(
-			log.New(os.Stdout, " [SENDER] ", log.LstdFlags),
-			sender.Task(curs),
-		),
-		Monitor: actor.New(
-			log.New(os.Stdout, "[MONITOR] ", log.LstdFlags),
-			monitor.Task(curs),
-		),
-	}
+func New(curs *currencies.Currencies) (*Model, error) {
+	workers := NewWorkers(curs)
 
 	model := &Model{
 		Workers: workers,
@@ -52,31 +38,67 @@ func New(curs *currencies.Currencies) *Model {
 			Task(workers),
 		),
 		Lookup: make(map[string]*otc.Request),
+		Stops: map[*actor.Actor]chan struct{}{
+			workers.Scanner: make(chan struct{}),
+			workers.Sender:  make(chan struct{}),
+			workers.Monitor: make(chan struct{}),
+		},
+		stop: make(chan struct{}),
 	}
-	model.Start()
 
-	return model
+	// load all requests from disk
+	reqs, err := Load()
+	if err != nil {
+		return nil, err
+	}
+
+	// add to model for processing
+	for _, req := range reqs {
+		if err = model.Load(req); err != nil {
+			return nil, err
+		}
+	}
+
+	defer model.Start()
+	return model, nil
+}
+
+func (m *Model) Run(w time.Duration, s chan struct{}, a *actor.Actor) {
+	for {
+		<-time.After(w)
+
+		select {
+		case <-s:
+			a.Logs.Println("stopping")
+			return
+		default:
+			if !m.Paused() {
+				a.Tick()
+			}
+		}
+	}
 }
 
 func (m *Model) Start() {
-	go m.Router.Run(time.Second * 5)
-	go m.Workers.Scanner.Run(time.Second * 5)
-	go m.Workers.Sender.Run(time.Second * 5)
-	go m.Workers.Monitor.Run(time.Second * 5)
+	wait := time.Second * 5
 
-	go func() {
-		for {
-			<-time.After(time.Second * 5)
+	// start model routing actor
+	go m.Run(wait, m.stop, m.Router)
 
-			m.Logger.Printf(
-				"(%d) = [%d] + [%d] + [%d]\n",
-				m.Router.Count(),
-				m.Workers.Scanner.Count(),
-				m.Workers.Sender.Count(),
-				m.Workers.Monitor.Count(),
-			)
-		}
-	}()
+	// start service actors on tick loop
+	go m.Run(wait, m.Stops[m.Workers.Scanner], m.Workers.Scanner)
+	go m.Run(wait, m.Stops[m.Workers.Sender], m.Workers.Sender)
+	go m.Run(wait, m.Stops[m.Workers.Monitor], m.Workers.Monitor)
+}
+
+func (m *Model) Stop() {
+	// stop model routing
+	m.stop <- struct{}{}
+
+	// stop service actors
+	for _, stop := range m.Stops {
+		stop <- struct{}{}
+	}
 }
 
 func (m *Model) Status(iden string) (otc.Status, int64, error) {
@@ -103,10 +125,8 @@ func (m *Model) Load(req *otc.Request) error {
 		Request: req,
 		Done:    make(chan *otc.Result, 1),
 	}
-	work.Done <- &otc.Result{
-		Finished: time.Now().UTC().Unix(),
-		Err:      nil,
-	}
+
+	m.Workers.Route(work)
 	m.Router.Add(work)
 
 	return nil

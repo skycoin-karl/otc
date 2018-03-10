@@ -44,7 +44,8 @@ func (c *Currencies) Add(curr otc.Currency, conn Connection) error {
 	c.Prices[curr] = &Pricer{
 		Using: INTERNAL,
 		Sources: map[Source]*Price{
-			INTERNAL: NewPrice(2000000000),
+			INTERNAL: NewPrice(200000),
+			EXCHANGE: NewPrice(150000),
 		},
 	}
 
@@ -115,4 +116,13 @@ func (c *Currencies) Price(curr otc.Currency) (uint64, error) {
 
 	price, _, _ := c.Prices[curr].GetPrice()
 	return price, nil
+}
+
+func (c *Currencies) Source(curr otc.Currency) (Source, error) {
+	if c.Prices[curr] == nil {
+		return "", ErrPriceMissing
+	}
+
+	source := c.Prices[curr].GetSource()
+	return source, nil
 }

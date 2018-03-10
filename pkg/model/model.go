@@ -89,6 +89,19 @@ func (m *Model) Start() {
 	go m.Run(wait, m.Stops[m.Workers.Scanner], m.Workers.Scanner)
 	go m.Run(wait, m.Stops[m.Workers.Sender], m.Workers.Sender)
 	go m.Run(wait, m.Stops[m.Workers.Monitor], m.Workers.Monitor)
+
+	go func() {
+		for {
+			<-time.After(wait)
+
+			m.Logger.Printf(
+				`[%d] [%d] [%d]`,
+				m.Workers.Scanner.Count(),
+				m.Workers.Sender.Count(),
+				m.Workers.Monitor.Count(),
+			)
+		}
+	}()
 }
 
 func (m *Model) Stop() {
@@ -165,7 +178,7 @@ func (m *Model) Add(req *otc.Request) error {
 func (m *Model) Paused() bool {
 	m.RLock()
 	defer m.RUnlock()
-	return m.Running
+	return !m.Running
 }
 
 func (m *Model) Pause() {

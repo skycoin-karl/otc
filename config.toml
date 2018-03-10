@@ -1,0 +1,11 @@
+[SKY]
+node = "localhost:6430"
+seed = "seed"
+name = "otc"
+
+[BTC]
+node = "localhost:18332"
+user = "otc"
+pass = "otc"
+account = "otc"
+testnet = true

@@ -7,12 +7,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/skycoin/services/otc/pkg/actor"
-	"github.com/skycoin/services/otc/pkg/currencies"
-	"github.com/skycoin/services/otc/pkg/monitor"
-	"github.com/skycoin/services/otc/pkg/otc"
-	"github.com/skycoin/services/otc/pkg/scanner"
-	"github.com/skycoin/services/otc/pkg/sender"
+	"github.com/skycoin-karl/otc/pkg/actor"
+	"github.com/skycoin-karl/otc/pkg/currencies"
+	"github.com/skycoin-karl/otc/pkg/monitor"
+	"github.com/skycoin-karl/otc/pkg/otc"
+	"github.com/skycoin-karl/otc/pkg/scanner"
+	"github.com/skycoin-karl/otc/pkg/sender"
 )
 
 var ErrReqMissing error = errors.New("request missing")

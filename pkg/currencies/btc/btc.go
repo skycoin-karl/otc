@@ -8,7 +8,7 @@ import (
 
 	"github.com/btcsuite/btcd/rpcclient"
 	"github.com/btcsuite/btcutil"
-	"github.com/skycoin/services/otc/pkg/otc"
+	"github.com/skycoin-karl/otc/pkg/otc"
 )
 
 const (

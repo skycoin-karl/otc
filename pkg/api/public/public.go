@@ -3,8 +3,8 @@ package public
 import (
 	"net/http"
 
-	"github.com/skycoin/services/otc/pkg/currencies"
-	"github.com/skycoin/services/otc/pkg/model"
+	"github.com/skycoin-karl/otc/pkg/currencies"
+	"github.com/skycoin-karl/otc/pkg/model"
 )
 
 func New(curs *currencies.Currencies, modl *model.Model) *http.ServeMux {

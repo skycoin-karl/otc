@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/skycoin/services/otc/pkg/currencies"
-	"github.com/skycoin/services/otc/pkg/model"
-	"github.com/skycoin/services/otc/pkg/otc"
+	"github.com/skycoin-karl/otc/pkg/currencies"
+	"github.com/skycoin-karl/otc/pkg/model"
+	"github.com/skycoin-karl/otc/pkg/otc"
 )
 
 func Config(curs *currencies.Currencies, modl *model.Model) http.HandlerFunc {

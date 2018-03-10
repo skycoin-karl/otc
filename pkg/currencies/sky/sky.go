@@ -3,7 +3,7 @@ package sky
 import (
 	"fmt"
 
-	"github.com/skycoin/services/otc/pkg/otc"
+	"github.com/skycoin-karl/otc/pkg/otc"
 	"github.com/skycoin/skycoin/src/api/cli"
 	"github.com/skycoin/skycoin/src/api/webrpc"
 	"github.com/skycoin/skycoin/src/wallet"

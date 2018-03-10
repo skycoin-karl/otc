@@ -3,7 +3,7 @@ package model
 import (
 	"time"
 
-	"github.com/skycoin/services/otc/pkg/otc"
+	"github.com/skycoin-karl/otc/pkg/otc"
 )
 
 func Task(workers *Workers) func(*otc.Work) (bool, error) {

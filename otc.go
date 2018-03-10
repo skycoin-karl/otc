@@ -3,12 +3,12 @@ package main
 import (
 	"net/http"
 
-	"github.com/skycoin/services/otc/pkg/api/public"
-	"github.com/skycoin/services/otc/pkg/currencies"
-	"github.com/skycoin/services/otc/pkg/currencies/btc"
-	"github.com/skycoin/services/otc/pkg/currencies/sky"
-	"github.com/skycoin/services/otc/pkg/model"
-	"github.com/skycoin/services/otc/pkg/otc"
+	"github.com/skycoin-karl/otc/pkg/api/public"
+	"github.com/skycoin-karl/otc/pkg/currencies"
+	"github.com/skycoin-karl/otc/pkg/currencies/btc"
+	"github.com/skycoin-karl/otc/pkg/currencies/sky"
+	"github.com/skycoin-karl/otc/pkg/model"
+	"github.com/skycoin-karl/otc/pkg/otc"
 )
 
 var CURRENCIES = currencies.New()

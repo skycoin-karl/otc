@@ -3,8 +3,8 @@ package monitor
 import (
 	"time"
 
-	"github.com/skycoin/services/otc/pkg/currencies"
-	"github.com/skycoin/services/otc/pkg/otc"
+	"github.com/skycoin-karl/otc/pkg/currencies"
+	"github.com/skycoin-karl/otc/pkg/otc"
 )
 
 func Task(curs *currencies.Currencies) func(*otc.Work) (bool, error) {

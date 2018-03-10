@@ -1,8 +1,8 @@
 package model
 
 import (
-	"github.com/skycoin/services/otc/pkg/actor"
-	"github.com/skycoin/services/otc/pkg/otc"
+	"github.com/skycoin-karl/otc/pkg/actor"
+	"github.com/skycoin-karl/otc/pkg/otc"
 )
 
 type Workers struct {

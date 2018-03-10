@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/skycoin/services/otc/pkg/currencies"
-	"github.com/skycoin/services/otc/pkg/model"
-	"github.com/skycoin/services/otc/pkg/otc"
+	"github.com/skycoin-karl/otc/pkg/currencies"
+	"github.com/skycoin-karl/otc/pkg/model"
+	"github.com/skycoin-karl/otc/pkg/otc"
 	"github.com/skycoin/skycoin/src/cipher"
 )
 

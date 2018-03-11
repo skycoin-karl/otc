@@ -17,7 +17,7 @@ func Config(curs *currencies.Currencies, modl *model.Model) http.HandlerFunc {
 			return
 		}
 
-		price, err := curs.Price(otc.SKY)
+		price, err := curs.Price(otc.BTC)
 		if err != nil {
 			http.Error(w, "server error", http.StatusInternalServerError)
 			return

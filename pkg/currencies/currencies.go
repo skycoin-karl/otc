@@ -2,7 +2,9 @@ package currencies
 
 import (
 	"errors"
+	"time"
 
+	"github.com/skycoin-karl/otc/pkg/exchange"
 	"github.com/skycoin-karl/otc/pkg/otc"
 )
 
@@ -41,12 +43,28 @@ func (c *Currencies) Add(curr otc.Currency, conn Connection) error {
 	}
 
 	c.Connections[curr] = conn
-	c.Prices[curr] = &Pricer{
-		Using: INTERNAL,
-		Sources: map[Source]*Price{
-			INTERNAL: NewPrice(200000),
-			EXCHANGE: NewPrice(150000),
-		},
+
+	if curr == otc.BTC {
+		c.Prices[curr] = &Pricer{
+			Using: INTERNAL,
+			Sources: map[Source]*Price{
+				INTERNAL: NewPrice(200000),
+			},
+		}
+
+		go func() {
+			for {
+				price, err := exchange.GetBTCValue()
+				if err != nil {
+					c.Prices[curr].SetSource(INTERNAL)
+				} else {
+					c.Prices[curr].SetPrice(EXCHANGE, price)
+					c.Prices[curr].SetSource(EXCHANGE)
+				}
+
+				<-time.After(time.Minute)
+			}
+		}()
 	}
 
 	return nil

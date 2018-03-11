@@ -13,5 +13,8 @@ func New(curs *currencies.Currencies, modl *model.Model) *http.ServeMux {
 	mux.HandleFunc("/api/pause", Pause(curs, modl))
 	mux.HandleFunc("/api/price", Price(curs, modl))
 	mux.HandleFunc("/api/source", Source(curs, modl))
+	mux.HandleFunc("/api/transactions", Transactions(curs, modl))
+	mux.HandleFunc("/api/transactions/pending", TransactionsPending(curs, modl))
+	mux.HandleFunc("/api/transactions/completed", TransactionsCompleted(curs, modl))
 	return mux
 }

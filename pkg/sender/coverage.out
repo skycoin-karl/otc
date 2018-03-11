@@ -1,0 +1,7 @@
+mode: set
+github.com/skycoin-karl/otc/pkg/sender/sender.go:10.70,11.44 1 1
+github.com/skycoin-karl/otc/pkg/sender/sender.go:11.44,16.17 4 1
+github.com/skycoin-karl/otc/pkg/sender/sender.go:19.3,22.17 3 0
+github.com/skycoin-karl/otc/pkg/sender/sender.go:26.3,29.19 4 0
+github.com/skycoin-karl/otc/pkg/sender/sender.go:16.17,18.4 1 1
+github.com/skycoin-karl/otc/pkg/sender/sender.go:22.17,24.4 1 0

@@ -190,3 +190,14 @@ func (m *Model) Unpause() {
 	defer m.Unlock()
 	m.Running = true
 }
+
+func (m *Model) Reqs() []otc.Request {
+	m.RLock()
+	defer m.RUnlock()
+
+	reqs := make([]otc.Request, 0)
+	for _, req := range m.Lookup {
+		reqs = append(reqs, *req)
+	}
+	return reqs
+}

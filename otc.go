@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/signal"
 
+	"github.com/skycoin-karl/otc/pkg/api/admin"
 	"github.com/skycoin-karl/otc/pkg/api/public"
 	"github.com/skycoin-karl/otc/pkg/currencies"
 	"github.com/skycoin-karl/otc/pkg/currencies/btc"
@@ -43,6 +44,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	admin := admin.New(CURRENCIES, modl)
+	go http.ListenAndServe(":8000", admin)
 
 	public := public.New(CURRENCIES, modl)
 	println("listening")

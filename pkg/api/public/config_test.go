@@ -31,7 +31,7 @@ func TestConfig(t *testing.T) {
 			otc.SKY: &MockConnection{},
 		},
 		Prices: map[otc.Currency]*currencies.Pricer{
-			otc.SKY: &currencies.Pricer{
+			otc.BTC: &currencies.Pricer{
 				Using: currencies.INTERNAL,
 				Sources: map[currencies.Source]*currencies.Price{
 					currencies.INTERNAL: currencies.NewPrice(100),

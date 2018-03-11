@@ -1,0 +1,27 @@
+mode: set
+github.com/skycoin-karl/otc/pkg/api/public/bind.go:14.76,15.54 1 1
+github.com/skycoin-karl/otc/pkg/api/public/bind.go:15.54,24.62 2 1
+github.com/skycoin-karl/otc/pkg/api/public/bind.go:29.3,32.17 3 1
+github.com/skycoin-karl/otc/pkg/api/public/bind.go:37.3,38.17 2 1
+github.com/skycoin-karl/otc/pkg/api/public/bind.go:47.3,62.17 3 1
+github.com/skycoin-karl/otc/pkg/api/public/bind.go:67.3,74.28 2 1
+github.com/skycoin-karl/otc/pkg/api/public/bind.go:24.62,27.4 2 1
+github.com/skycoin-karl/otc/pkg/api/public/bind.go:32.17,35.4 2 1
+github.com/skycoin-karl/otc/pkg/api/public/bind.go:38.17,39.40 1 1
+github.com/skycoin-karl/otc/pkg/api/public/bind.go:44.4,44.10 1 1
+github.com/skycoin-karl/otc/pkg/api/public/bind.go:39.40,41.5 1 1
+github.com/skycoin-karl/otc/pkg/api/public/bind.go:41.5,43.5 1 1
+github.com/skycoin-karl/otc/pkg/api/public/bind.go:62.17,65.4 2 1
+github.com/skycoin-karl/otc/pkg/api/public/config.go:12.78,13.54 1 1
+github.com/skycoin-karl/otc/pkg/api/public/config.go:13.54,15.17 2 1
+github.com/skycoin-karl/otc/pkg/api/public/config.go:20.3,21.17 2 1
+github.com/skycoin-karl/otc/pkg/api/public/config.go:26.3,31.32 1 1
+github.com/skycoin-karl/otc/pkg/api/public/config.go:15.17,18.4 2 1
+github.com/skycoin-karl/otc/pkg/api/public/config.go:21.17,24.4 2 1
+github.com/skycoin-karl/otc/pkg/api/public/public.go:10.73,16.2 5 0
+github.com/skycoin-karl/otc/pkg/api/public/status.go:12.78,13.54 1 1
+github.com/skycoin-karl/otc/pkg/api/public/status.go:13.54,22.62 2 1
+github.com/skycoin-karl/otc/pkg/api/public/status.go:27.3,28.17 2 1
+github.com/skycoin-karl/otc/pkg/api/public/status.go:33.3,36.22 1 1
+github.com/skycoin-karl/otc/pkg/api/public/status.go:22.62,25.4 2 1
+github.com/skycoin-karl/otc/pkg/api/public/status.go:28.17,31.4 2 1

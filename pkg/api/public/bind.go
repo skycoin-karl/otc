@@ -22,7 +22,6 @@ func Bind(curs *currencies.Currencies, modl *model.Model) http.HandlerFunc {
 		)
 
 		if err = json.NewDecoder(r.Body).Decode(&data); err != nil {
-			println(err.Error())
 			http.Error(w, "invalid JSON", http.StatusBadRequest)
 			return
 		}
@@ -65,19 +64,13 @@ func Bind(curs *currencies.Currencies, modl *model.Model) http.HandlerFunc {
 			return
 		}
 
-		if err = modl.Add(req); err != nil {
-			http.Error(w, "server error", http.StatusInternalServerError)
-			return
-		}
+		modl.Add(req)
 
-		if err = json.NewEncoder(w).Encode(&struct {
+		json.NewEncoder(w).Encode(&struct {
 			DropAddress  string       `json:"drop_address"`
 			DropCurrency otc.Currency `json:"drop_currency"`
 			// TODO: change to price
 			DropValue uint64 `json:"drop_value"`
-		}{dropAddr, curr, price}); err != nil {
-			http.Error(w, "server error", http.StatusInternalServerError)
-			return
-		}
+		}{dropAddr, curr, price})
 	}
 }

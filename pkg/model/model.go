@@ -145,7 +145,7 @@ func (m *Model) Load(req *otc.Request) error {
 	return nil
 }
 
-func (m *Model) Add(req *otc.Request) error {
+func (m *Model) Add(req *otc.Request) {
 	m.Lock()
 	defer m.Unlock()
 	m.Lookup[req.Iden()] = req
@@ -158,7 +158,7 @@ func (m *Model) Add(req *otc.Request) error {
 		Err:      nil,
 	}
 	if err := Save(req, res); err != nil {
-		return err
+		m.Logger.Println(err)
 	}
 	if req.Status == otc.NEW {
 		req.Status = otc.DEPOSIT
@@ -171,8 +171,6 @@ func (m *Model) Add(req *otc.Request) error {
 	work.Done <- res
 
 	m.Router.Add(work)
-
-	return nil
 }
 
 func (m *Model) Paused() bool {

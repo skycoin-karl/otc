@@ -13,11 +13,7 @@ func Config(curs *currencies.Currencies, modl *model.Model) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		holding, err := curs.Holding(otc.SKY)
 		if err != nil {
-			if err == currencies.ErrConnMissing {
-				http.Error(w, "not supported", http.StatusBadRequest)
-			} else {
-				http.Error(w, "server error", http.StatusInternalServerError)
-			}
+			http.Error(w, "server error", http.StatusInternalServerError)
 			return
 		}
 
@@ -27,14 +23,11 @@ func Config(curs *currencies.Currencies, modl *model.Model) http.HandlerFunc {
 			return
 		}
 
-		if err = json.NewEncoder(w).Encode(&struct {
+		json.NewEncoder(w).Encode(&struct {
 			Status string `json:"otcStatus"`
-			// TODO: chang to holding
+			// TODO: change to holding
 			Holding uint64 `json:"balance"`
 			Price   uint64 `json:"price"`
-		}{"WORKING", holding, price}); err != nil {
-			http.Error(w, "server error", http.StatusInternalServerError)
-			return
-		}
+		}{"WORKING", holding, price})
 	}
 }

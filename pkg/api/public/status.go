@@ -26,20 +26,13 @@ func Status(curs *currencies.Currencies, modl *model.Model) http.HandlerFunc {
 
 		status, updated, err := modl.Status(data.DropCurrency + ":" + data.DropAddress)
 		if err != nil {
-			if err == model.ErrReqMissing {
-				http.Error(w, "request missing", http.StatusBadRequest)
-			} else {
-				http.Error(w, "invalid JSON", http.StatusInternalServerError)
-			}
+			http.Error(w, "request missing", http.StatusBadRequest)
 			return
 		}
 
-		if err = json.NewEncoder(w).Encode(&struct {
+		json.NewEncoder(w).Encode(&struct {
 			Status    otc.Status `json:"status"`
 			UpdatedAt int64      `json:"updated_at"`
-		}{status, updated}); err != nil {
-			http.Error(w, "server error", http.StatusInternalServerError)
-			return
-		}
+		}{status, updated})
 	}
 }

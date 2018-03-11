@@ -1,0 +1,5 @@
+mode: set
+github.com/skycoin-karl/otc/pkg/otc/config.go:22.46,26.2 3 0
+github.com/skycoin-karl/otc/pkg/otc/otc.go:43.31,45.2 1 1
+github.com/skycoin-karl/otc/pkg/otc/otc.go:47.33,49.2 1 1
+github.com/skycoin-karl/otc/pkg/otc/otc.go:81.34,83.2 1 1
